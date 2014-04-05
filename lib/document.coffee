@@ -194,5 +194,6 @@ class PDFDocument extends stream.Readable
     
   toString: ->
     "[object PDFDocument]"
-    
+
+PDFDocument.PDFImage = require './image'
 module.exports = PDFDocument
