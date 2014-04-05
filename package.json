@@ -9,7 +9,7 @@
     "document",
     "vector"
   ],
-  "version": "0.5.2",
+  "version": "0.5.2b",
   "repository": {
     "type": "git",
     "url": "https://github.com/bpampuch/pdfkit.git"
@@ -31,5 +31,13 @@
   "main": "./js/document",
   "engine": [
     "node >= v0.6.0"
-  ]
+  ],
+  "bugs": {
+    "url": "https://github.com/bpampuch/pdfkit/issues"
+  },
+  "directories": {
+    "doc": "docs"
+  },
+  "author": "",
+  "license": "MIT"
 }
