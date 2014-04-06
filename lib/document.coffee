@@ -196,4 +196,5 @@ class PDFDocument extends stream.Readable
     "[object PDFDocument]"
 
 PDFDocument.PDFImage = require './image'
+PDFDocument.PDFReference = PDFReference
 module.exports = PDFDocument
