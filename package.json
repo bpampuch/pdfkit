@@ -9,7 +9,7 @@
     "document",
     "vector"
   ],
-  "version": "0.5.2b",
+  "version": "0.5.2c",
   "repository": {
     "type": "git",
     "url": "https://github.com/bpampuch/pdfkit.git"
