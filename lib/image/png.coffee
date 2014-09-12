@@ -18,7 +18,6 @@ class PNGImage
       BitsPerComponent: @image.bits
       Width: @width
       Height: @height
-      Length: @imgData.length
       Filter: 'FlateDecode'
       
     unless @image.hasAlphaChannel
@@ -35,10 +34,8 @@ class PNGImage
       @obj.data['ColorSpace'] = @image.colorSpace
     else
       # embed the color palette in the PDF as an object stream
-      palette = document.ref
-        Length: @image.palette.length
-
-      palette.end @image.palette
+      palette = document.ref()
+      palette.end new Buffer @image.palette
 
       # build the color space array for the image
       @obj.data['ColorSpace'] = ['Indexed', 'DeviceRGB', (@image.palette.length / 3) - 1, palette]
@@ -83,7 +80,6 @@ class PNGImage
         Height: @height
         Width: @width
         BitsPerComponent: 8
-        Length: @alphaChannel.length
         Filter: 'FlateDecode'
         ColorSpace: 'DeviceGray'
         Decode: [0, 1]

@@ -7,12 +7,6 @@ module.exports =
     @y = 0
     @_lineGap = 0
     
-    # Keeps track of what has been set in the document
-    @_textState = 
-      mode: 0
-      wordSpacing: 0
-      characterSpacing: 0
-    
   lineGap: (@_lineGap) ->
     return this
     
@@ -171,8 +165,6 @@ module.exports =
     text = '' + text
     return if text.length is 0
 
-    state = @_textState
-
     # handle options
     align = options.align or 'left'
     wordSpacing = options.wordSpacing or 0
@@ -182,7 +174,7 @@ module.exports =
     if options.width
       switch align
         when 'right'
-          textWidth = @widthOfString text.trimRight(), options
+          textWidth = @widthOfString text.replace(/\s+$/, ''), options
           x += options.lineWidth - textWidth
 
         when 'center'
@@ -207,7 +199,7 @@ module.exports =
       @save()
       @strokeColor @_fillColor... unless options.stroke
       
-      lineWidth = if @_fontSize >= 20 then 2 else 1
+      lineWidth = if @_fontSize < 10 then 0.5 else Math.floor(@_fontSize / 10)
       @lineWidth lineWidth
       
       d = if options.underline then 1 else 2
@@ -225,7 +217,7 @@ module.exports =
     y = @page.height - y - (@_font.ascender / 1000 * @_fontSize)
 
     # add current font to page if necessary
-    @page.fonts[@_font.id] ?= @_font.ref
+    @page.fonts[@_font.id] ?= @_font.ref()
 
     # tell the font subset to use the characters
     @_font.use(text)
@@ -241,10 +233,10 @@ module.exports =
 
     # rendering mode
     mode = if options.fill and options.stroke then 2 else if options.stroke then 1 else 0
-    @addContent "#{mode} Tr" unless mode is state.mode
+    @addContent "#{mode} Tr" if mode
 
     # Character spacing
-    @addContent characterSpacing + ' Tc' unless characterSpacing is state.characterSpacing
+    @addContent "#{characterSpacing} Tc" if characterSpacing
     
     # Add the actual text
     # If we have a word spacing value, we need to encode each word separately
@@ -276,7 +268,3 @@ module.exports =
     
     # restore flipped coordinate system
     @restore()
-
-    # keep track of text states
-    state.mode = mode
-    state.characterSpacing = characterSpacing

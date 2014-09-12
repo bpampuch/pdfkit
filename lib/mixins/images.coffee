@@ -12,12 +12,15 @@ module.exports =
     
     x = x ? options.x ? @x
     y = y ? options.y ? @y
-
-    image = @_imageRegistry[src]
+    
+    unless Buffer.isBuffer(src)
+      image = @_imageRegistry[src]
+      
     if not image
       image = PDFImage.open src, 'I' + (++@_imageCount)
       image.embed this
-      @_imageRegistry[src] = image unless Buffer.isBuffer(src)
+      unless Buffer.isBuffer(src)
+        @_imageRegistry[src] = image
         
     @page.xobjects[image.label] ?= image.obj
 
@@ -51,8 +54,15 @@ module.exports =
       
       if options.align is 'center'
         x = x + bw / 2 - w / 2
+        
       else if options.align is 'right'
         x = x + bw - w
+        
+      if options.valign is 'center'
+        y = y + bh / 2 - h / 2
+        
+      else if options.valign is 'bottom'
+        y = y + bh - h
     
     # Set the current y position to below the image if it is in the document flow      
     @y += h if @y is y
